@@ -1,0 +1,396 @@
+Step 1: Loading TKG and event data (one-time operation)...
+Loading TKG and event data...
+TKG loaded: 4100 nodes, 11860 edges
+Event list loaded: 4100 events
+
+Step 2: Creating orchestrator and metrics evaluator...
+QueryParserAgent initialized.
+ContextRetrievalAgent initialized with TKG and Search Index.
+PredictionAgent initialized for multi-policy predictions.
+RankingAgent initialized with historical accuracy database.
+OrchestratorAgent initialized with all sub-agents.
+
+Step 3: Running multiple queries...
+
+================================================================================
+EXAMPLE 1: Historical Event-Based Query (verbose mode)
+================================================================================
+
+================================================================================
+ORCHESTRATOR: Starting Prediction Workflow
+================================================================================
+
+[Step 1/5] Query Parsing...
+Historical query parsed: Event on 2022-05-06, looking 60 days ahead
+  Parsed: actor='The Supreme Court', location=['Uttar Pradesh'], event_type='accused'
+
+[Step 2/5] Context Retrieval (3 policies)...
+Historical reference event found: Accuse on 2022-05-06
+Context retrieved: 4 events for policy 'baseline'
+Historical reference event found: Accuse on 2022-05-06
+Context retrieved: 4 events for policy 'intensity_aware'
+Historical reference event found: Accuse on 2022-05-06
+Context retrieved: 16 events for policy 'actor_history'
+
+[Step 3/5] Generating Predictions (3 policies)...
+  baseline: Predicted 'Response' (confidence: 0.80)
+  intensity_aware: Predicted 'Protest' (confidence: 0.85)
+  actor_history: Predicted 'Accuse' (confidence: 0.85)
+
+[Step 4/5] Ranking and Combining Predictions...
+Ranking complete: 1 final predictions
+
+[Step 5/5] Formatting Output...
+
+ORCHESTRATOR: Workflow Complete
+================================================================================
+================================================================================
+INDIVIDUAL POLICY PREDICTIONS
+================================================================================
+
+POLICY #1: BASELINE
+--------------------------------------------------------------------------------
+Event Type: Response
+Predicted Date: 2022-07-05T00:00:00
+Actors: Government Of Uttar Pradesh (India), Supreme Court (India)
+Location: \UP\
+Intensity: 2.0
+Description: In response to the Supreme Court's accusations regarding healthcare issues, the Government of Uttar Pradesh initiated a series of reforms aimed at improving healthcare infrastructure and services. This included the allocation of additional funds for hospitals and the establishment of new health initiatives. The Supreme Court monitored these developments closely, leading to a temporary easing of tensions between the judiciary and the state government.
+Raw Confidence: 80.0%
+
+Reasoning: The pattern of accusations from the judiciary typically prompts a governmental response, especially in critical areas like healthcare. Given the recent momentum of judicial scrutiny, it is likely that the government would take steps to address the issues raised to mitigate further legal challenges and public discontent.
+
+Supporting Events: 20220505-0180-90419E14A887_Accuse, 20220506-1926-7Df0F8Ff5Dd4_Accuse
+
+POLICY #2: INTENSITY_AWARE
+--------------------------------------------------------------------------------
+Event Type: Protest
+Predicted Date: 2022-07-05T00:00:00
+Actors: Healthcare Workers, Opposition Parties, Government of Uttar Pradesh
+Location: \UP\
+Intensity: 4.0
+Description: Following the Supreme Court's accusations against the Government of Uttar Pradesh regarding healthcare issues, there was a significant escalation in public dissent. Healthcare workers organized protests demanding better conditions and accountability from the government. Opposition parties joined the protests, amplifying the calls for reform and accountability in the healthcare sector.
+Raw Confidence: 85.0%
+
+Reasoning: The pattern of intense accusations from the Supreme Court likely triggered a strong public response, particularly from those directly affected by the healthcare issues. The historical context shows a trend of escalating tensions following judicial actions against the government, leading to public mobilization and protests.
+
+Supporting Events: 20220505-0180-90419E14A887_Accuse, 20220506-1926-7Df0F8Ff5Dd4_Accuse, 20220506-3323-Ca1Af33178D0_Accuse
+
+POLICY #3: ACTOR_HISTORY
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-07-05T00:00:00
+Actors: Supreme Court, Government Of Uttar Pradesh
+Location: \UP\
+Intensity: -3.0
+Description: Following the Supreme Court's accusation against the Government of Uttar Pradesh regarding healthcare issues, the state government faced increased scrutiny and pressure to address the healthcare crisis. This led to public protests and demands for accountability, prompting the government to announce a series of reforms aimed at improving healthcare services in the state.
+Raw Confidence: 85.0%
+
+Reasoning: Historically, when the Supreme Court has accused state governments, it often results in heightened public awareness and pressure on the government to respond. The pattern indicates that such accusations typically lead to governmental actions or reforms in response to public outcry and judicial scrutiny.
+
+Supporting Events: 20220506-1926-7Df0F8Ff5Dd4_Accuse
+
+
+================================================================================
+FINAL RANKED PREDICTIONS
+================================================================================
+
+PREDICTION #1 (Confidence: 79.8%)
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-07-05T00:00:00
+Actors: Government Of Uttar Pradesh (India), Government of Uttar Pradesh, Government Of Uttar Pradesh, Supreme Court, Opposition Parties, Healthcare Workers, Supreme Court (India)
+Location: \UP\
+Intensity: 1.0
+Description: Following the Supreme Court's accusation against the Government of Uttar Pradesh regarding healthcare issues, the state government faced increased scrutiny and pressure to address the healthcare crisis. This led to public protests and demands for accountability, prompting the government to announce a series of reforms aimed at improving healthcare services in the state. (Consensus from 3 policies)
+
+Contributing Policies: baseline, intensity_aware, actor_history
+Consensus Bonus: +20.0%
+Explanation: Consensus prediction from 3 policies: baseline (48.40%), intensity_aware (47.26%), actor_history (59.75%). Agreement across multiple strategies increases confidence.
+
+
+================================================================================
+PERFORMANCE METRICS
+================================================================================
+
+Actual Events in Horizon: 0
+Number of Predictions: 1
+
+[WARNING] No actual events found in the prediction horizon.
+  Cannot calculate metrics without ground truth.
+================================================================================
+
+================================================================================
+EXAMPLE 2: Historical Event-Based Query (verbose mode)
+================================================================================
+
+================================================================================
+ORCHESTRATOR: Starting Prediction Workflow
+================================================================================
+
+[Step 1/5] Query Parsing...
+Historical query parsed: Event on 2022-06-26, looking 60 days ahead
+  Parsed: actor='Rahul Gandhi', location=[], event_type='accusation'
+
+[Step 2/5] Context Retrieval (3 policies)...
+Historical reference event found: Accuse on 2022-06-26
+Context retrieved: 4 events for policy 'baseline'
+Historical reference event found: Accuse on 2022-06-26
+Context retrieved: 4 events for policy 'intensity_aware'
+Historical reference event found: Accuse on 2022-06-26
+Context retrieved: 16 events for policy 'actor_history'
+
+[Step 3/5] Generating Predictions (3 policies)...
+  baseline: Predicted 'Political Rally' (confidence: 0.85)
+  intensity_aware: Predicted 'Accuse' (confidence: 0.85)
+  actor_history: Predicted 'Accuse' (confidence: 0.85)
+
+[Step 4/5] Ranking and Combining Predictions...
+Ranking complete: 1 final predictions
+
+[Step 5/5] Formatting Output...
+
+ORCHESTRATOR: Workflow Complete
+================================================================================
+================================================================================
+INDIVIDUAL POLICY PREDICTIONS
+================================================================================
+
+POLICY #1: BASELINE
+--------------------------------------------------------------------------------
+Event Type: Political Rally
+Predicted Date: 2022-08-25T00:00:00
+Actors: Rahul Gandhi, Narendra Modi, Congress Party, BJP
+Location: \KL\
+Intensity: 4.5
+Description: In the aftermath of Rahul Gandhi's accusations against Narendra Modi, both leaders intensified their political campaigns, leading to a series of rallies and public speeches. Rahul Gandhi organized a rally in Kerala to galvanize support for the Congress Party, while Narendra Modi countered with a rally in the same region to defend his administration and attack the opposition. This period saw heightened political activity and public engagement from both parties.
+Raw Confidence: 85.0%
+
+Reasoning: The reference event indicates a significant political confrontation, which typically leads to increased campaigning and public discourse. The historical context shows a pattern of political escalation following accusations, suggesting that both leaders would respond with public events to solidify their positions and rally their bases.
+
+Supporting Events: 20220625-3411-0D1219675044_Threaten, 20220625-5440-078D207Fd0Be_Retreat, 20220625-6887-E5Adcd79622F_Retreat, 20220626-0682-F3F0B06Bf035_Accuse
+
+POLICY #2: INTENSITY_AWARE
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-08-25T00:00:00
+Actors: Narendra Modi, Rahul Gandhi, BJP, Congress
+Location: \DL\
+Intensity: 5.0
+Description: In the following weeks, Narendra Modi publicly responded to Rahul Gandhi's accusations, leading to a series of counter-accusations from BJP leaders against Congress. This escalated into a heated political debate, with both parties intensifying their campaigns ahead of upcoming elections. The situation culminated in a major rally in Delhi where Modi addressed the nation, further increasing tensions between the two parties.
+Raw Confidence: 85.0%
+
+Reasoning: The initial accusation by Rahul Gandhi against Narendra Modi created a high-intensity political environment, prompting a strong response from Modi and the BJP. Given the historical context of political rivalry and the pattern of escalating accusations, it is likely that this led to further confrontations and public events aimed at rallying support.
+
+Supporting Events: 20220625-5440-078D207Fd0Be_Retreat, 20220625-6887-E5Adcd79622F_Retreat, 20220626-0682-F3F0B06Bf035_Accuse
+
+POLICY #3: ACTOR_HISTORY
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-08-25T00:00:00
+Actors: Narendra Modi, Rahul Gandhi
+Location: \KL\
+Intensity: -3.0
+Description: In the 60 days following Rahul Gandhi's accusation against Narendra Modi, there was a series of counter-accusations from Modi towards Gandhi, as well as increased political rhetoric from both sides. Modi's party, the Bharatiya Janata Party (BJP), launched a campaign to discredit Gandhi's claims, while Gandhi continued to press for accountability on various issues, maintaining the pressure on the Prime Minister.
+Raw Confidence: 85.0%
+
+Reasoning: Historically, after accusations are made in Indian politics, it is common for the accused party to retaliate with counter-accusations or to mobilize their supporters to defend their position. Given the pattern of behavior observed in previous events, it is likely that Modi would respond to Gandhi's accusations in a similar manner.
+
+Supporting Events: 20220626-0682-F3F0B06Bf035_Accuse
+
+
+================================================================================
+FINAL RANKED PREDICTIONS
+================================================================================
+
+PREDICTION #1 (Confidence: 79.8%)
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-08-25T00:00:00
+Actors: BJP, Narendra Modi, Rahul Gandhi, Congress, Congress Party
+Location: \KL\
+Intensity: 2.2
+Description: In the 60 days following Rahul Gandhi's accusation against Narendra Modi, there was a series of counter-accusations from Modi towards Gandhi, as well as increased political rhetoric from both sides. Modi's party, the Bharatiya Janata Party (BJP), launched a campaign to discredit Gandhi's claims, while Gandhi continued to press for accountability on various issues, maintaining the pressure on the Prime Minister. (Consensus from 3 policies)
+
+Contributing Policies: baseline, intensity_aware, actor_history
+Consensus Bonus: +20.0%
+Explanation: Consensus prediction from 3 policies: baseline (51.42%), intensity_aware (48.53%), actor_history (59.75%). Agreement across multiple strategies increases confidence.
+
+
+================================================================================
+PERFORMANCE METRICS
+================================================================================
+
+Actual Events in Horizon: 4
+Number of Predictions: 1
+
+Actual Event Types: Accuse, Protest
+Predicted Event Types (top 5): Accuse
+
+--------------------------------------------------------------------------------
+HIT@K METRICS (Does any actual event appear in top-k predictions?)
+--------------------------------------------------------------------------------
+Hit@1: 1.00 [HIT]
+  -> Matched types: accuse
+Hit@3: 1.00 [HIT]
+  -> Matched types: accuse
+Hit@5: 1.00 [HIT]
+  -> Matched types: accuse
+
+--------------------------------------------------------------------------------
+MEAN RECIPROCAL RANK (MRR)
+--------------------------------------------------------------------------------
+MRR: 1.0000 (first match at rank 1)
+
+--------------------------------------------------------------------------------
+TYPE ACCURACY (Top prediction exact match)
+--------------------------------------------------------------------------------
+Accuracy: 1.00 [CORRECT]
+  -> Matched: accuse
+================================================================================
+
+================================================================================
+EXAMPLE 3: Historical Event-Based Query (verbose mode)
+================================================================================
+
+================================================================================
+ORCHESTRATOR: Starting Prediction Workflow
+================================================================================
+
+[Step 1/5] Query Parsing...
+Historical query parsed: Event on 2022-09-10, looking 30 days ahead
+  Parsed: actor='Siddaramaiah', location=[], event_type='accusation'
+
+[Step 2/5] Context Retrieval (3 policies)...
+Historical reference event found: Accuse on 2022-09-10
+Context retrieved: 4 events for policy 'baseline'
+Historical reference event found: Accuse on 2022-09-10
+Context retrieved: 4 events for policy 'intensity_aware'
+Historical reference event found: Accuse on 2022-09-10
+Context retrieved: 16 events for policy 'actor_history'
+
+[Step 3/5] Generating Predictions (3 policies)...
+  baseline: Predicted 'Political Response' (confidence: 0.85)
+  intensity_aware: Predicted 'Accuse' (confidence: 0.85)
+  actor_history: Predicted 'Accuse' (confidence: 0.80)
+
+[Step 4/5] Ranking and Combining Predictions...
+Ranking complete: 1 final predictions
+
+[Step 5/5] Formatting Output...
+
+ORCHESTRATOR: Workflow Complete
+================================================================================
+================================================================================
+INDIVIDUAL POLICY PREDICTIONS
+================================================================================
+
+POLICY #1: BASELINE
+--------------------------------------------------------------------------------
+Event Type: Political Response
+Predicted Date: 2022-10-10T00:00:00
+Actors: Siddaramaiah, Bharatiya Janata Party, Karnataka Government
+Location: \KA\
+Intensity: -2.5
+Description: In the 30 days following Siddaramaiah's accusation against the Bharatiya Janata Party regarding flood relief, the Karnataka government initiated a series of public statements and press conferences to address the concerns raised. Siddaramaiah intensified his criticism, leading to a political rally where he highlighted the inadequacies of the BJP's response to the flood situation. The BJP, in turn, attempted to counter these claims by showcasing their relief efforts, but faced backlash from local communities. This back-and-forth escalated tensions between the parties, with both sides preparing for the upcoming elections.
+Raw Confidence: 85.0%
+
+Reasoning: The recent trend shows a pattern of political accusations and responses, particularly in the context of election preparations. The intensity of the accusations and the political climate suggest that both parties would engage in heightened rhetoric and public displays of their positions on critical issues like disaster relief.
+
+Supporting Events: 20220909-9581-3F0E761A0Baa_Accuse, 20220909-7076-48Bd09649Ed4_Accuse, 20220909-9033-4487E25Daad9_Accuse, 20220910-6971-01Efce66F183_Accuse
+
+POLICY #2: INTENSITY_AWARE
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-10-10T00:00:00
+Actors: Siddaramaiah, Bharatiya Janata Party
+Location: \KA\
+Intensity: -3.5
+Description: In the following weeks, Siddaramaiah intensified his criticism of the Bharatiya Janata Party, accusing them of negligence in flood relief efforts. This led to a series of public statements and rallies where he rallied support against the BJP's handling of the situation, further polarizing the political landscape in Karnataka.
+Raw Confidence: 85.0%
+
+Reasoning: The reference event indicates a high-intensity accusation from Siddaramaiah against the BJP, which is likely to provoke a response from the BJP and further accusations in a politically charged environment. The historical context shows a pattern of escalating accusations among political leaders, suggesting that Siddaramaiah's actions would lead to a continuation of this trend.
+
+Supporting Events: 20220909-9581-3F0E761A0Baa_Accuse, 20220909-7076-48Bd09649Ed4_Accuse, 20220909-9033-4487E25Daad9_Accuse, 20220910-6971-01Efce66F183_Accuse
+
+POLICY #3: ACTOR_HISTORY
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-10-10T00:00:00
+Actors: Siddaramaiah, Bharatiya Janata Party
+Location: Karnataka
+Intensity: -3.0
+Description: In the 30 days following Siddaramaiah's accusation against the Bharatiya Janata Party regarding flood relief, Siddaramaiah continued to publicly criticize the BJP for its handling of the situation, leading to a series of statements and press conferences where he highlighted the inadequacies of the relief efforts. This resulted in increased political tension in Karnataka, with the Congress party rallying support against the BJP's governance.
+Raw Confidence: 80.0%
+
+Reasoning: Historically, when political leaders accuse the ruling party of failing in their duties, it often leads to a sustained campaign of criticism and public statements aimed at rallying support and highlighting the failures of the accused party. Siddaramaiah's previous actions against the BJP suggest a pattern of continued accusations and mobilization of political support following such events.
+
+Supporting Events: 20220910-6971-01Efce66F183_Accuse
+
+
+================================================================================
+FINAL RANKED PREDICTIONS
+================================================================================
+
+PREDICTION #1 (Confidence: 75.8%)
+--------------------------------------------------------------------------------
+Event Type: Accuse
+Predicted Date: 2022-10-10T00:00:00
+Actors: Karnataka Government, Bharatiya Janata Party, Siddaramaiah
+Location: Karnataka
+Intensity: -3.0
+Description: In the 30 days following Siddaramaiah's accusation against the Bharatiya Janata Party regarding flood relief, Siddaramaiah continued to publicly criticize the BJP for its handling of the situation, leading to a series of statements and press conferences where he highlighted the inadequacies of the relief efforts. This resulted in increased political tension in Karnataka, with the Congress party rallying support against the BJP's governance. (Consensus from 3 policies)
+
+Contributing Policies: baseline, intensity_aware, actor_history
+Consensus Bonus: +20.0%
+Explanation: Consensus prediction from 3 policies: baseline (53.97%), intensity_aware (49.81%), actor_history (55.76%). Agreement across multiple strategies increases confidence.
+
+
+================================================================================
+PERFORMANCE METRICS
+================================================================================
+
+Actual Events in Horizon: 2
+Number of Predictions: 1
+
+Actual Event Types: Accuse, Coerce
+Predicted Event Types (top 5): Accuse
+
+--------------------------------------------------------------------------------
+HIT@K METRICS (Does any actual event appear in top-k predictions?)
+--------------------------------------------------------------------------------
+Hit@1: 1.00 [HIT]
+  -> Matched types: accuse
+Hit@3: 1.00 [HIT]
+  -> Matched types: accuse
+Hit@5: 1.00 [HIT]
+  -> Matched types: accuse
+
+--------------------------------------------------------------------------------
+MEAN RECIPROCAL RANK (MRR)
+--------------------------------------------------------------------------------
+MRR: 1.0000 (first match at rank 1)
+
+--------------------------------------------------------------------------------
+TYPE ACCURACY (Top prediction exact match)
+--------------------------------------------------------------------------------
+Accuracy: 1.00 [CORRECT]
+  -> Matched: accuse
+================================================================================
+
+================================================================================
+AGGREGATE PERFORMANCE SUMMARY
+================================================================================
+
+Average Performance Across 3 Queries:
+  Hit@1:         66.67%
+  Hit@3:         66.67%
+  Hit@5:         66.67%
+  MRR:           0.6667
+  Type Accuracy: 66.67%
+
+Per-Query Breakdown:
+  Query 1: Hit@3=0 [N], MRR=0.0000, Actual events=0
+  Query 2: Hit@3=1 [Y], MRR=1.0000, Actual events=4
+  Query 3: Hit@3=1 [Y], MRR=1.0000, Actual events=2
+================================================================================
